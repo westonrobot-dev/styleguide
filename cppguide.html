@@ -180,9 +180,9 @@ from C++17 and C++20 in your project.</p>
 
 <h2 id="Header_Files">Header Files</h2>
 
-<p>In general, every <code>.cc</code> file should have an
-associated <code>.h</code> file. There are some common
-exceptions, such as unit tests and small <code>.cc</code> files containing
+<p>In general, every <code>.cpp</code> file should have an
+associated <code>.hpp</code> file. There are some common
+exceptions, such as unit tests and small <code>.cpp</code> files containing
 just a <code>main()</code> function.</p>
 
 <p>Correct use of header files can make a huge difference to
@@ -195,7 +195,7 @@ pitfalls of using header files.</p>
 <h3 id="Self_contained_Headers">Self-contained Headers</h3>
 
 <p>Header files should be self-contained (compile on their own) and
-end in <code>.h</code>.  Non-header files that are meant for inclusion
+end in <code>.hpp</code>.  Non-header files that are meant for inclusion
 should end in <code>.inc</code> and be used sparingly.</p>
 
 <p>All header files should be self-contained. Users and refactoring
@@ -207,12 +207,12 @@ other headers it needs.</p>
 <p>When a header declares inline functions or templates that clients of the
 header will instantiate, the inline functions and templates must also have
 definitions in the header, either directly or in files it includes.  Do not move
-these definitions to separately included header (<code>-inl.h</code>) files;
+these definitions to separately included header (<code>-inl.hpp</code>) files;
 this practice was common in the past, but is no longer allowed.  When all
-instantiations of a template occur in one <code>.cc</code> file, either because
+instantiations of a template occur in one <code>.cpp</code> file, either because
 they're <a href="https://en.cppreference.com/w/cpp/language/class_template#Explicit_instantiation">
 explicit</a> or because the definition is accessible to only
-the <code>.cc</code> file, the template definition can be kept in that file.</p>
+the <code>.cpp</code> file, the template definition can be kept in that file.</p>
 
 <p>There are rare cases where a file designed to be included is not
 self-contained.  These are typically intended to be included at unusual
@@ -235,7 +235,7 @@ should be
 <div>
 <p>To guarantee uniqueness, they should
 be based on the full path in a project's source tree. For
-example, the file <code>foo/src/bar/baz.h</code> in
+example, the file <code>foo/src/bar/baz.hpp</code> in
 project <code>foo</code> should have the following
 guard:</p>
 </div>
@@ -261,9 +261,9 @@ include header files for any other reason.
 <p>Do not rely on transitive inclusions. This allows people to remove
 no-longer-needed <code>#include</code> statements from their headers without
 breaking clients. This also applies to related headers
-- <code>foo.cc</code> should include <code>bar.h</code> if it uses a
-symbol from it even if <code>foo.h</code>
-includes <code>bar.h</code>.</p>
+- <code>foo.cpp</code> should include <code>bar.hpp</code> if it uses a
+symbol from it even if <code>foo.hpp</code>
+includes <code>bar.hpp</code>.</p>
 
 <h3 id="Forward_Declarations">Forward Declarations</h3>
 
@@ -319,12 +319,12 @@ ABSL_DECLARE_FLAG(flag_in_b);
   Replacing an <code>#include</code> with a forward
   declaration can silently change the meaning of
   code:
-<pre>// b.h:
+<pre>// b.hpp:
 struct B {};
 struct D : B {};
 
-// good_user.cc:
-#include "b.h"
+// good_user.cpp:
+#include "b.hpp"
 void f(B*);
 void f(void*);
 void test(D* x) { f(x); }  // Calls f(B*)
@@ -408,10 +408,10 @@ directory without use of UNIX directory aliases
 <code>.</code> (the current directory) or <code>..</code>
 (the parent directory). For example,
 
-<code>google-awesome-project/src/base/logging.h</code>
+<code>google-awesome-project/src/base/logging.hpp</code>
 should be included as:</p>
 
-<pre>#include "base/logging.h"
+<pre>#include "base/logging.hpp"
 </pre>
 
 <p>Headers should only be included using an angle-bracketed path if the library
@@ -426,14 +426,14 @@ brackets:</p>
 <li>In rare cases, third_party libraries (e.g. <code>&lt;Python.h&gt;</code>).</li>
 </ul>
 
-<p>In <code><var>dir/foo</var>.cc</code> or
-<code><var>dir/foo_test</var>.cc</code>, whose main
+<p>In <code><var>dir/foo</var>.cpp</code> or
+<code><var>dir/foo_test</var>.cpp</code>, whose main
 purpose is to implement or test the stuff in
-<code><var>dir2/foo2</var>.h</code>, order your includes
+<code><var>dir2/foo2</var>.hpp</code>, order your includes
 as follows:</p>
 
 <ol>
-  <li><code><var>dir2/foo2</var>.h</code>.</li>
+  <li><code><var>dir2/foo2</var>.hpp</code>.</li>
 
   <li>A blank line</li>
 
@@ -449,35 +449,35 @@ as follows:</p>
   <li>A blank line</li>
 
   <div>
-  <li>Other libraries' <code>.h</code> files.</li>
+  <li>Other libraries' <code>.hpp</code> files.</li>
 
   <li>A blank line</li>
   </div>
 
   <li>
-  Your project's <code>.h</code>
+  Your project's <code>.hpp</code>
   files.</li>
 </ol>
 
 <p>Separate each non-empty group with one blank line.</p>
 
 <p>With the preferred ordering, if the related header
-<code><var>dir2/foo2</var>.h</code> omits any necessary
-includes, the build of <code><var>dir/foo</var>.cc</code>
-or <code><var>dir/foo</var>_test.cc</code> will break.
+<code><var>dir2/foo2</var>.hpp</code> omits any necessary
+includes, the build of <code><var>dir/foo</var>.cpp</code>
+or <code><var>dir/foo</var>_test.cpp</code> will break.
 Thus, this rule ensures that build breaks show up first
 for the people working on these files, not for innocent
 people in other packages.</p>
 
-<p><code><var>dir/foo</var>.cc</code> and
-<code><var>dir2/foo2</var>.h</code> are usually in the same
-directory (e.g., <code>base/basictypes_test.cc</code> and
-<code>base/basictypes.h</code>), but may sometimes be in different
+<p><code><var>dir/foo</var>.cpp</code> and
+<code><var>dir2/foo2</var>.hpp</code> are usually in the same
+directory (e.g., <code>base/basictypes_test.cpp</code> and
+<code>base/basictypes.hpp</code>), but may sometimes be in different
 directories too.</p>
 
 
 
-<p>Note that the C headers such as <code>stddef.h</code>
+<p>Note that the C headers such as <code>stddef.hpp</code>
 are essentially interchangeable with their C++ counterparts
 (<code>cstddef</code>).
 Either style is acceptable, but prefer consistency with existing code.</p>
@@ -488,20 +488,20 @@ this rule and should be fixed when convenient.</p>
 
 <p>For example, the includes in
 
-<code>google-awesome-project/src/foo/internal/fooserver.cc</code>
+<code>google-awesome-project/src/foo/internal/fooserver.cpp</code>
 might look like this:</p>
 
-<pre>#include "foo/server/fooserver.h"
+<pre>#include "foo/server/fooserver.hpp"
 
-#include &lt;sys/types.h&gt;
-#include &lt;unistd.h&gt;
+#include &lt;sys/types.hpp&gt;
+#include &lt;unistd.hpp&gt;
 
 #include &lt;string&gt;
 #include &lt;vector&gt;
 
-#include "base/basictypes.h"
-#include "foo/server/bar.h"
-#include "third_party/absl/flags/flag.h"
+#include "base/basictypes.hpp"
+#include "foo/server/bar.hpp"
+#include "third_party/absl/flags/flag.hpp"
 </pre>
 
 <p><b>Exception:</b></p>
@@ -511,9 +511,9 @@ conditional includes. Such code can put conditional
 includes after other includes. Of course, keep your
 system-specific code small and localized. Example:</p>
 
-<pre>#include "foo/public/fooserver.h"
+<pre>#include "foo/public/fooserver.hpp"
 
-#include "base/port.h"  // For LANG_CXX11.
+#include "base/port.hpp"  // For LANG_CXX11.
 
 #ifdef LANG_CXX11
 #include &lt;initializer_list&gt;
@@ -596,7 +596,7 @@ namespaces, this can add a lot of clutter.</p>
   gflags</a> definitions/declarations
   and forward declarations of classes from other namespaces.</p>
 
-<pre>// In the .h file
+<pre>// In the .hpp file
 namespace mynamespace {
 
 // All declarations are within the namespace scope.
@@ -610,7 +610,7 @@ class MyClass {
 }  // namespace mynamespace
 </pre>
 
-<pre>// In the .cc file
+<pre>// In the .cpp file
 namespace mynamespace {
 
 // Definition of functions is within scope of the namespace.
@@ -621,10 +621,10 @@ void MyClass::Foo() {
 }  // namespace mynamespace
 </pre>
 
-  <p>More complex <code>.cc</code> files might have additional details,
+  <p>More complex <code>.cpp</code> files might have additional details,
   like flags or using-declarations.</p>
 
-<pre>#include "a.h"
+<pre>#include "a.hpp"
 
 ABSL_FLAG(bool, someflag, false, "a flag");
 
@@ -669,11 +669,11 @@ using namespace foo;
   in a header file becomes part of the public
   API exported by that file.</p>
 
-<pre>// Shorten access to some commonly used names in .cc files.
+<pre>// Shorten access to some commonly used names in .cpp files.
 namespace baz = ::foo::bar::baz;
 </pre>
 
-<pre>// Shorten access to some commonly used names (in a .h file).
+<pre>// Shorten access to some commonly used names (in a .hpp file).
 namespace librarian {
 namespace internal {  // Internal, not part of the API.
 namespace sidetable = ::pipeline_diagnostics::sidetable;
@@ -707,10 +707,10 @@ using ::absl::container_internal::ImplementationDetail;
 <a id="Unnamed_Namespaces_and_Static_Variables"></a>
 <h3 id="Internal_Linkage">Internal Linkage</h3>
 
-<p>When definitions in a <code>.cc</code> file do not need to be
+<p>When definitions in a <code>.cpp</code> file do not need to be
 referenced outside that file, give them internal linkage by placing
 them in an unnamed namespace or declaring them <code>static</code>.
-Do not use either of these constructs in <code>.h</code> files.
+Do not use either of these constructs in <code>.hpp</code> files.
 
 </p><p class="definition"></p>
 <p>All declarations can be given internal linkage by placing them in unnamed
@@ -721,9 +721,9 @@ the same name, then the two entities are completely independent.</p>
 
 <p class="decision"></p>
 
-<p>Use of internal linkage in <code>.cc</code> files is encouraged
+<p>Use of internal linkage in <code>.cpp</code> files is encouraged
 for all code that does not need to be referenced elsewhere.
-Do not use internal linkage in <code>.h</code> files.</p>
+Do not use internal linkage in <code>.hpp</code> files.</p>
 
 <p>Format unnamed namespaces like named namespaces. In the
   terminating comment, leave the namespace name empty:</p>
@@ -762,7 +762,7 @@ this is no different than just giving the names a
 common prefix, and such grouping is usually unnecessary anyway.</p>
 
 <p>If you define a nonmember function and it is only
-needed in its <code>.cc</code> file, use
+needed in its <code>.cpp</code> file, use
 <a href="#Internal_Linkage">internal linkage</a> to limit
 its scope.</p>
 
@@ -956,8 +956,12 @@ Foo a[] = { Foo(1), Foo(2), Foo(3) };  // Fine</pre>
 
 <p>Constant initialization is always allowed. Constant initialization of
 static storage duration variables should be marked with <code>constexpr</code>
-or <code>constinit</code>.
-Any non-local static storage
+or where possible the
+
+
+<a href="https://github.com/abseil/abseil-cpp/blob/03c1513538584f4a04d666be5eb469e3979febba/absl/base/attributes.hpp#L540">
+<code>ABSL_CONST_INIT</code></a>
+attribute. Any non-local static storage
 duration variable that is not so marked should be presumed to have
 dynamic initialization, and reviewed very carefully.</p>
 
@@ -1004,7 +1008,7 @@ does not make an observable difference. For example:</p>
     int"), or an array of pairs (e.g., pairs of <code>int</code> and <code>const
     char*</code>). For small collections, linear search is entirely sufficient
     (and efficient, due to memory locality); consider using the facilities from
-    <a href="https://github.com/abseil/abseil-cpp/blob/master/absl/algorithm/container.h">absl/algorithm/container.h</a>
+    <a href="https://github.com/abseil/abseil-cpp/blob/master/absl/algorithm/container.hpp">absl/algorithm/container.hpp</a>
     for the standard operations. If necessary, keep the collection in sorted
     order and use a binary search algorithm.
 
@@ -1029,8 +1033,10 @@ does not make an observable difference. For example:</p>
 <p><code>thread_local</code> variables that aren't declared inside a function
 must be initialized with a true compile-time constant,
 and this must be enforced by using the
-<a href="https://en.cppreference.com/w/cpp/language/constinit">
-  <code>constinit</code></a>
+
+
+<a href="https://github.com/abseil/abseil-cpp/blob/master/absl/base/attributes.hpp">
+<code>ABSL_CONST_INIT</code></a>
 attribute. Prefer
 <code>thread_local</code> over other ways of defining thread-local data.</p>
 
@@ -1122,12 +1128,18 @@ get a particularly hard to diagnose use-after-free.</p>
 }
 </pre>
 
-  <p>Note that <code>thread_local</code> variables will be destroyed whenever a thread exits.
-    If the destructor of any such variable refers to any other (potentially-destroyed)
-    <code>thread_local</code> we will suffer from hard to diagnose use-after-free bugs.
-    Prefer trivial types, or types that provably run no user-provided code at destruction to
-    minimize the potential of accessing any other <code>thread_local</code>.
-  </p>
+<p><code>thread_local</code> variables at class or namespace scope must be
+initialized with a true compile-time constant (i.e., they must have no
+dynamic initialization). To enforce this, <code>thread_local</code> variables
+at class or namespace scope must be annotated with
+
+
+<a href="https://github.com/abseil/abseil-cpp/blob/master/absl/base/attributes.hpp">
+<code>ABSL_CONST_INIT</code></a>
+(or <code>constexpr</code>, but that should be rare):</p>
+
+<pre>ABSL_CONST_INIT thread_local Foo foo = ...;
+</pre>
 
 <p><code>thread_local</code> should be preferred over other mechanisms for
 defining thread-local data.</p>
@@ -1676,7 +1688,7 @@ built-in operators. For example, use <code>|</code> as a
 bitwise- or logical-or, not as a shell-style pipe.</p>
 
 <p>Define operators only on your own types. More precisely,
-define them in the same headers, <code>.cc</code> files, and namespaces
+define them in the same headers, <code>.cpp</code> files, and namespaces
 as the types they operate on. That way, the operators are available
 wherever the type is, minimizing the risk of multiple
 definitions. If possible, avoid defining operators as templates,
@@ -1734,14 +1746,14 @@ apply to operator overloading as well.</p>
 of some easy boilerplate in the form of accessors (usually <code>const</code>) if necessary.</p>
 
 <p>For technical
-reasons, we allow data members of a test fixture class defined in a <code>.cc</code> file to
+reasons, we allow data members of a test fixture class defined in a <code>.cpp</code> file to
 be <code>protected</code> when using
 
 
 <a href="https://github.com/google/googletest">Google
 Test</a>.
-If a test fixture class is defined outside of the <code>.cc</code> file it is used in, for example
-in a <code>.h</code> file, make data members <code>private</code>.</p>
+If a test fixture class is defined outside of the <code>.cpp</code> file it is used in, for example
+in a <code>.hpp</code> file, make data members <code>private</code>.</p>
 
 <h3 id="Declaration_Order">Declaration Order</h3>
 
@@ -3042,12 +3054,12 @@ problems of printing, comparisons, and structure alignment.</p>
   formatting, such as
 
 
-    <a href="https://github.com/abseil/abseil-cpp/blob/master/absl/strings/str_cat.h"><code>StrCat</code></a>
+    <a href="https://github.com/abseil/abseil-cpp/blob/master/absl/strings/str_cat.hpp"><code>StrCat</code></a>
 
     or
 
 
-    <a href="https://github.com/abseil/abseil-cpp/blob/master/absl/strings/substitute.h"><code>Substitute</code></a>
+    <a href="https://github.com/abseil/abseil-cpp/blob/master/absl/strings/substitute.hpp"><code>Substitute</code></a>
 
     for fast simple conversions,
 
@@ -3151,7 +3163,7 @@ with macros; if you use macros, follow it whenever
 possible:</p>
 
 <ul>
-  <li>Don't define macros in a <code>.h</code> file.</li>
+  <li>Don't define macros in a <code>.hpp</code> file.</li>
 
   <li><code>#define</code> macros right before you use
   them, and <code>#undef</code> them right after.</li>
@@ -4022,7 +4034,7 @@ guide, the following C++ features may not be used:</p>
   style.</li>
 
   <li>The <code>&lt;cfenv&gt;</code> and
-  <code>&lt;fenv.h&gt;</code> headers, because many
+  <code>&lt;fenv.hpp&gt;</code> headers, because many
   compilers do not support those features reliably.</li>
 
   <li>The <code>&lt;filesystem&gt;</code> header, which
@@ -4092,7 +4104,7 @@ using enum MyEnumType;  // Creates aliases for all enumerators in MyEnumType.
 
   <p>Like other declarations, aliases declared in a header file are part of that
   header's public API unless they're in a function definition, in the private portion of a class,
-  or in an explicitly-marked internal namespace. Aliases in such areas or in <code>.cc</code> files
+  or in an explicitly-marked internal namespace. Aliases in such areas or in <code>.cpp</code> files
   are implementation details (because client code can't refer to them), and are not restricted by
   this rule.</p>
 
@@ -4154,9 +4166,9 @@ typedef unordered_set&lt;DataPoint, hash&lt;DataPoint&gt;, DataPointComparator&g
 </pre>
 
 <p>However, local convenience aliases are fine in function definitions, <code>private</code>
-  sections of classes, explicitly marked internal namespaces, and in <code>.cc</code> files:</p>
+  sections of classes, explicitly marked internal namespaces, and in <code>.cpp</code> files:</p>
 
-<pre>// In a .cc file
+<pre>// In a .cpp file
 using ::foo::Bar;
 </pre>
 
@@ -4324,25 +4336,25 @@ local pattern to follow, prefer "<code>_</code>".</p>
 <p>Examples of acceptable file names:</p>
 
 <ul>
-  <li><code>my_useful_class.cc</code></li>
-  <li><code>my-useful-class.cc</code></li>
-  <li><code>myusefulclass.cc</code></li>
-  <li><code>myusefulclass_test.cc // _unittest and _regtest are deprecated.</code></li>
+  <li><code>my_useful_class.cpp</code></li>
+  <li><code>my-useful-class.cpp</code></li>
+  <li><code>myusefulclass.cpp</code></li>
+  <li><code>myusefulclass_test.cpp // _unittest and _regtest are deprecated.</code></li>
 </ul>
 
-<p>C++ files should end in <code>.cc</code> and header files should end in
-<code>.h</code>. Files that rely on being textually included at specific points
+<p>C++ files should end in <code>.cpp</code> and header files should end in
+<code>.hpp</code>. Files that rely on being textually included at specific points
 should end in <code>.inc</code> (see also the section on
 <a href="#Self_contained_Headers">self-contained headers</a>).</p>
 
 <p>Do not use filenames that already exist in
-<code>/usr/include</code>, such as <code>db.h</code>.</p>
+<code>/usr/include</code>, such as <code>db.hpp</code>.</p>
 
 <p>In general, make your filenames very specific. For
-example, use <code>http_server_logs.h</code> rather than
-<code>logs.h</code>. A very common case is to have a pair
-of files called, e.g., <code>foo_bar.h</code> and
-<code>foo_bar.cc</code>, defining a class called
+example, use <code>http_server_logs.hpp</code> rather than
+<code>logs.hpp</code>. A very common case is to have a pair
+of files called, e.g., <code>foo_bar.hpp</code> and
+<code>foo_bar.cpp</code>, defining a class called
 <code>FooBar</code>.</p>
 
 <h3 id="Type_Names">Type Names</h3>
@@ -4517,7 +4529,7 @@ added to the same <code>internal</code> namespace causing a collision
 collisions). In such a situation, using the filename to make a unique
 internal name is helpful
 (<code>websearch::index::frobber_internal</code> for use
-in <code>frobber.h</code>).</p>
+in <code>frobber.hpp</code>).</p>
 
 <h3 id="Enumerator_Names">Enumerator Names</h3>
 
@@ -4646,7 +4658,18 @@ author line, consider deleting the author line.
 New files should usually not contain copyright notice or
 author line.</p>
 
-<h3 id="Class_Comments">Struct and Class Comments</h3>
+<h4>File Contents</h4>
+
+<p>If a <code>.hpp</code> declares multiple abstractions, the file-level comment
+should broadly describe the contents of the file, and how the abstractions are
+related. A 1 or 2 sentence file-level comment may be sufficient. The detailed
+documentation about individual abstractions belongs with those abstractions,
+not at the file level.</p>
+
+<p>Do not duplicate comments in both the <code>.hpp</code> and the
+<code>.cpp</code>. Duplicated comments diverge.</p>
+
+<h3 id="Class_Comments">Class Comments</h3>
 
 <p>Every non-obvious class or struct declaration should have an
 accompanying comment that describes what it is for and how it should
@@ -4675,7 +4698,7 @@ surrounding multithreaded use.</p>
 <p>The class comment is often a good place for a small example code snippet
 demonstrating a simple and focused usage of the class.</p>
 
-<p>When sufficiently separated (e.g., <code>.h</code> and <code>.cc</code>
+<p>When sufficiently separated (e.g., <code>.hpp</code> and <code>.cpp</code>
 files), comments describing the use of the class should go together with its
 interface definition; comments about the class operation and implementation
 should accompany the implementation of the class's methods.</p>
@@ -4692,7 +4715,7 @@ operation.</p>
 preceding it that describe what the function does and how to use
 it. These comments may be omitted only if the function is simple and
 obvious (e.g., simple accessors for obvious properties of the class).
-Private methods and functions declared in <code>.cc</code> files are not exempt.
+Private methods and functions declared in <code>.cpp</code> files are not exempt.
 Function comments should be written with an implied subject of
 <i>This function</i> and should start with the verb phrase; for example,
 "Opens the file", rather than "Open the file". In general, these comments do not
@@ -4770,7 +4793,7 @@ the second half.</p>
 
 <p>Note you should <em>not</em> just repeat the comments
 given with the function declaration, in the
-<code>.h</code> file or wherever. It's okay to
+<code>.hpp</code> file or wherever. It's okay to
 recapitulate briefly what the function does, but the
 focus of the comments should be on how it does it.</p>
 
@@ -5951,7 +5974,7 @@ style:</p>
 <ul>
   <li>Do not use Hungarian notation (for example, naming
   an integer <code>iNum</code>). Use the Google naming
-  conventions, including the <code>.cc</code> extension
+  conventions, including the <code>.cpp</code> extension
   for source files.</li>
 
   <li>Windows defines many of its own synonyms for
@@ -6007,15 +6030,15 @@ occasionally need to break on Windows:</p>
 
   <li>The usual way of working with precompiled headers
   is to include a header file at the top of each source
-  file, typically with a name like <code>StdAfx.h</code>
-  or <code>precompile.h</code>. To make your code easier
+  file, typically with a name like <code>StdAfx.hpp</code>
+  or <code>precompile.hpp</code>. To make your code easier
   to share with other projects, avoid including this file
-  explicitly (except in <code>precompile.cc</code>), and
+  explicitly (except in <code>precompile.cpp</code>), and
   use the <code>/FI</code> compiler option to include the
   file automatically.</li>
 
   <li>Resource headers, which are usually named
-  <code>resource.h</code> and contain only macros, do not
+  <code>resource.hpp</code> and contain only macros, do not
   need to conform to these style guidelines.</li>
 </ul>
 </div>
