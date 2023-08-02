@@ -1,6 +1,6 @@
 # Weston Robot Style Guides
 
-The set of style guides listed on this page are adopted from [Google Style Guide](https://westonrobot-dev.github.io/styleguide/) and adjusted for use within Weston Robot.
+The style guides listed on this page are adopted from [Google Style Guide](https://westonrobot-dev.github.io/styleguide/) and adjusted for use within Weston Robot.
 
 <!-- Every major open-source project has its own style guide: a set of conventions
 (sometimes arbitrary) about how to write code for that project. It is much
