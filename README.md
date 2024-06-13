@@ -1,6 +1,6 @@
 # Weston Robot Style Guides
 
-The style guides listed on this page are adopted from [Google Style Guide](https://westonrobot-dev.github.io/styleguide/) and adjusted for use within Weston Robot.
+The style guides listed on this page are adopted from [Google Style Guide](https://google.github.io/styleguide/) and adjusted for use within Weston Robot.
 
 <!-- Every major open-source project has its own style guide: a set of conventions
 (sometimes arbitrary) about how to write code for that project. It is much
@@ -18,17 +18,17 @@ that apply to that project. -->
 <!-- *   [AngularJS Style Guide][angular] -->
 <!-- *   [Common Lisp Style Guide][cl] -->
 *   [C++ Style Guide][cpp]
+*   [Python Style Guide][py]
 <!-- *   [C# Style Guide][csharp] -->
 <!-- *   [Go Style Guide][go] -->
 *   [HTML/CSS Style Guide][htmlcss]
 *   [JavaScript Style Guide][js]
+*   [TypeScript Style Guide][ts]
 <!-- *   [Java Style Guide][java] -->
 <!-- *   [Objective-C Style Guide][objc] -->
-*   [Python Style Guide][py]
 <!-- *   [R Style Guide][r] -->
 *   [Shell Style Guide][sh]
 <!-- *   [Swift Style Guide][swift] -->
-*   [TypeScript Style Guide][ts]
 <!-- *   [Vim script Style Guide][vim] -->
 
 <!-- This project also contains [cpplint][cpplint], a tool to assist with style guide
