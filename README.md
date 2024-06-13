@@ -20,15 +20,15 @@ that apply to that project. -->
 *   [C++ Style Guide][cpp]
 <!-- *   [C# Style Guide][csharp] -->
 <!-- *   [Go Style Guide][go] -->
-<!-- *   [HTML/CSS Style Guide][htmlcss] -->
-<!-- *   [JavaScript Style Guide][js] -->
+*   [HTML/CSS Style Guide][htmlcss]
+*   [JavaScript Style Guide][js]
 <!-- *   [Java Style Guide][java] -->
 <!-- *   [Objective-C Style Guide][objc] -->
 *   [Python Style Guide][py]
 <!-- *   [R Style Guide][r] -->
 *   [Shell Style Guide][sh]
 <!-- *   [Swift Style Guide][swift] -->
-<!-- *   [TypeScript Style Guide][ts] -->
+*   [TypeScript Style Guide][ts]
 <!-- *   [Vim script Style Guide][vim] -->
 
 <!-- This project also contains [cpplint][cpplint], a tool to assist with style guide
